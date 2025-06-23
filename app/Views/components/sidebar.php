@@ -13,6 +13,7 @@
         <?php
         if (session()->get('role') == 'admin') {
         ?>
+
             <li class="nav-item">
                 <a class="nav-link <?php echo (uri_string() == 'keranjang') ? "" : "collapsed" ?>" href="keranjang">
                     <i class="bi bi-cart-check"></i>

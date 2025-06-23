@@ -35,5 +35,11 @@ $routes->group('produk_kategori', ['filter' => 'auth'], function ($routes) {
     $routes->get('delete/(:any)', 'ProdukKategoriController::delete/$1');
 });
 
+
 $routes->get('keranjang', 'TransaksiController::index', ['filter' => 'auth']);
 $routes->get('contact', 'Home::contactindex', ['filter' => 'auth']);
+$routes->get('checkout', 'TransaksiController::checkout', ['filter' => 'auth']);
+
+$routes->get('get-location', 'TransaksiController::getLocation', ['filter' => 'auth']);
+$routes->get('get-cost', 'TransaksiController::getCost', ['filter' => 'auth']);
+$routes->post('buy', 'TransaksiController::buy', ['filter' => 'auth']);
