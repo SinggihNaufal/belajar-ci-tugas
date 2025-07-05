@@ -36,6 +36,13 @@
             </li><!-- End Produk Kategori Nav -->
 
             <li class="nav-item">
+                <a class="nav-link <?php echo (uri_string() == 'Diskon') ? "" : "collapsed" ?>" href="diskon">
+                    <i class="bi bi-receipt"></i>
+                    <span>Managemen Diskon</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link <?php echo (uri_string() == 'profile') ? "" : "collapsed" ?>" href="profile">
                     <i class="bi bi-person"></i>
                     <span>Profile</span>

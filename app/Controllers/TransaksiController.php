@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\TransactionModel;
 use App\Models\TransactionDetailModel;
+use App\Models\DiskonModel;
+use CodeIgniter\I18n\Time;
 
 class TransaksiController extends BaseController
 {
@@ -12,6 +14,7 @@ class TransaksiController extends BaseController
     protected $apikey;
     protected $transaction;
     protected $transaction_detail;
+    protected $diskon;
 
     function __construct()
     {
@@ -19,9 +22,10 @@ class TransaksiController extends BaseController
         helper('form');
         $this->cart = \Config\Services::cart();
         $this->client = new \GuzzleHttp\Client();
-        $this->apikey = env('COST_KEY');
+        $this->apiKey = env('COST_KEY');
         $this->transaction = new TransactionModel();
         $this->transaction_detail = new TransactionDetailModel();
+        $this->diskon = new DiskonModel();
     }
 
     public function index()
@@ -33,12 +37,15 @@ class TransaksiController extends BaseController
 
     public function cart_add()
     {
+        //mengecek apakah ada diskon hari ini lalu kurangi harga yang dimasukkan dengan nominal diskon
+        $nominalDiskon = session()->get('diskon');
+
         $this->cart->insert(array(
-            'id'        => $this->request->getPost('id'),
-            'qty'       => 1,
-            'price'     => $this->request->getPost('harga'),
-            'name'      => $this->request->getPost('nama'),
-            'options'   => array('foto' => $this->request->getPost('foto'))
+            'id' => $this->request->getPost('id'),
+            'qty' => 1,
+            'price' => $this->request->getPost('harga') - $nominalDiskon,
+            'name' => $this->request->getPost('nama'),
+            'options' => array('foto' => $this->request->getPost('foto'))
         ));
         session()->setflashdata('success', 'Produk berhasil ditambahkan ke keranjang. (<a href="' . base_url() . 'keranjang">Lihat</a>)');
         return redirect()->to(base_url('/'));
@@ -57,7 +64,7 @@ class TransaksiController extends BaseController
         foreach ($this->cart->contents() as $value) {
             $this->cart->update(array(
                 'rowid' => $value['rowid'],
-                'qty'   => $this->request->getPost('qty' . $i++)
+                'qty' => $this->request->getPost('qty' . $i++)
             ));
         }
 
@@ -91,7 +98,7 @@ class TransaksiController extends BaseController
             [
                 'headers' => [
                     'accept' => 'application/json',
-                    'key' => $this->apikey,
+                    'key' => $this->apiKey,
                 ],
             ]
         );
@@ -131,7 +138,7 @@ class TransaksiController extends BaseController
                 ],
                 'headers' => [
                     'accept' => 'application/json',
-                    'key' => $this->apikey,
+                    'key' => $this->apiKey,
                 ],
             ]
         );
@@ -162,7 +169,7 @@ class TransaksiController extends BaseController
                     'transaction_id' => $last_insert_id,
                     'product_id' => $value['id'],
                     'jumlah' => $value['qty'],
-                    'diskon' => 0,
+                    'diskon' => session()->get('diskon'),
                     'subtotal_harga' => $value['qty'] * $value['price'],
                     'created_at' => date("Y-m-d H:i:s"),
                     'updated_at' => date("Y-m-d H:i:s")

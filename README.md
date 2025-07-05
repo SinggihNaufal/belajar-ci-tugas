@@ -23,6 +23,7 @@ Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4]
 - Panel Admin
   - Manajemen produk (CRUD)
   - Manajemen kategori
+  - Manajemen Diskon
   - Laporan transaksi
   - Export data ke PDF
 - Sistem Autentikasi
@@ -64,6 +65,9 @@ Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4]
    ```bash
    php spark db:seed UserSeeder
    ```
+   ```bash
+   php spark db:seed DiskonSeeder
+   ```
 6. **Jalankan server**
    ```bash
    php spark serve
@@ -76,14 +80,36 @@ Proyek ini adalah platform toko online yang dibangun menggunakan [CodeIgniter 4]
 Proyek menggunakan struktur MVC CodeIgniter 4:
 
 - app/Controllers - Logika aplikasi dan penanganan request
+  - ApiController.php - API endpoint
   - AuthController.php - Autentikasi pengguna
+  - DiskonController.php - Manajemen diskon
+  - Home.php - Halaman utama
   - ProdukController.php - Manajemen produk
+  - ProdukKategoriController.php - Manajemen kategori produk
   - TransaksiController.php - Proses transaksi
 - app/Models - Model untuk interaksi database
+  - DiskonModel.php - Model diskon
+  - ProductCategoryModel.php - Model kategori produk
   - ProductModel.php - Model produk
+  - TransactionDetailModel.php - Model detail transaksi
+  - TransactionModel.php - Model transaksi
   - UserModel.php - Model pengguna
 - app/Views - Template dan komponen UI
+  - components/Footer.php - Komponen footer
+  - components/Header.php - Komponen header
+  - components/sidebar.php - Komponen sidebar
+  - layout.php - Template layout
+  - layout_clear.php - Template layout tanpa header dan footer
+  - v_checkout.php - Halaman checkout
+  - v_contact.php - Halaman Kontak
+  - v_diskon.php - Halaman diskon
+  - v_home.php - Halaman utama
+  - v_keranjang.php - Halaman keranjang
+  - v_login.php - Halaman login
+  - v_produk_kategori.php - Halaman kategori produk
   - v_produk.php - Tampilan produk
   - v_keranjang.php - Halaman keranjang
+  - v_profile.php - Halaman profil detail pembelian
 - public/img - Gambar produk dan aset
 - public/NiceAdmin - Template admin
+- public/dashboard-toko - Halaman PHP untuk melihat laporan transaksi detail
